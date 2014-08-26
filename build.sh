@@ -40,7 +40,7 @@ case "$target" in
 
     test)
 	# run lang-specific tests
-        (cd lang/java; mvn test)
+        (cd lang/java; mvn -fn -Phadoop2 -Dhadoop.version=2 test)
 	(cd lang/py; ant test)
 	(cd lang/c; ./build.sh test)
 	(cd lang/c++; ./build.sh test)
@@ -51,7 +51,7 @@ case "$target" in
 
 	# create interop test data
         mkdir -p build/interop/data
-	(cd lang/java/avro; mvn exec:java -P interop-data-generate)
+	(cd lang/java/avro; mvn -Phadoop2 -Dhadoop.version=2 exec:java -P interop-data-generate)
 	(cd lang/py; ant interop-data-generate)
 	(cd lang/c; ./build.sh interop-data-generate)
 	#(cd lang/c++; make interop-data-generate)
@@ -59,7 +59,7 @@ case "$target" in
 	(cd lang/php; ./build.sh interop-data-generate)
 
 	# run interop data tests
-	(cd lang/java; mvn test -P interop-data-test)
+	(cd lang/java; mvn -fn -Phadoop2 -Dhadoop.version=2 test -P interop-data-test)
 	(cd lang/py; ant interop-data-test)
 	(cd lang/c; ./build.sh interop-data-test)
 	#(cd lang/c++; make interop-data-test)
@@ -67,7 +67,7 @@ case "$target" in
 	(cd lang/php; ./build.sh test-interop)
 
 	# java needs to package the jars for the interop rpc tests
-        (cd lang/java; mvn package -DskipTests)
+        (cd lang/java; mvn -Phadoop2 -Dhadoop.version=2 package -DskipTests)
 	# run interop rpc test
         /bin/bash share/test/interop/bin/test_rpc_interop.sh
 
@@ -94,8 +94,8 @@ case "$target" in
 
 	# build lang-specific artifacts
         
-	(cd lang/java; mvn package -DskipTests -Dhadoop.version=2; rm -rf mapred/target/classes/;
-	  mvn -P dist package -DskipTests -Davro.version=$VERSION javadoc:aggregate) 
+	(cd lang/java; mvn -Phadoop2 -Dhadoop.version=2 package -DskipTests ; rm -rf mapred/target/classes/;
+	  mvn -Phadoop2 -Dhadoop.version=2 -P dist package -DskipTests -Davro.version=$VERSION javadoc:aggregate) 
         (cd lang/java/trevni/doc; mvn site)
         (mvn -N -P copy-artifacts antrun:run) 
 

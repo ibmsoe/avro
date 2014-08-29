@@ -24,7 +24,7 @@
     "underscore"   :  "*"
   },
   "devDependencies" : {
-    "grunt"        :  "*"
+    "grunt"        :  "0.3.17"
   },
   "noAnalyze": true,
   "license": "Apache",
